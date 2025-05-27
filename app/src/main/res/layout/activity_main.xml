@@ -60,3 +60,21 @@
         android:gravity="center" />
 
 </LinearLayout>
+
+android {
+    // ...existing code...
+    signingConfigs {
+        create("release") {
+            storeFile = file("../release-key.jks") // Ajusta la ruta si es necesario
+            storePassword = "Elomerperu2010"
+            keyAlias = "releasekey"
+            keyPassword = "Elomerperu2010"
+        }
+    }
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
+}

@@ -144,9 +144,12 @@ class ServerConfigActivity : AppCompatActivity() {
         for (packageInfo in packages) {
             // Filtrar solo apps que no sean del sistema
             val appInfo = packageInfo.applicationInfo
-            if (appInfo != null && (appInfo.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM == 0)) {
+            if (appInfo != null && (appInfo.flags and ApplicationInfo.FLAG_SYSTEM == 0)) {
                 val appName = packageManager.getApplicationLabel(appInfo).toString()
-                apps.add(AppInfo(packageInfo.packageName, appName))
+                apps.add(AppInfo(
+                    packageInfo.packageName, appName,
+                    icon = TODO()
+                ))
             }
         }
 
