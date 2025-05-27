@@ -65,11 +65,37 @@ class ServerConfigActivity : AppCompatActivity() {
     }
 
     private fun showAppSelectionDialog() {
-        loadInstalledApps()
+        // Inflar el layout personalizado del diálogo
+        val dialogView = layoutInflater.inflate(R.layout.dialog_app_selection, null)
+        val dialogLvApps = dialogView.findViewById<ListView>(R.id.dialogLvApps)
+
+        // Cargar apps y configurar adaptador temporal para el diálogo
+        val packageManager = packageManager
+        val apps = mutableListOf<AppInfo>()
+        val packages = packageManager.getInstalledPackages(0)
+        for (packageInfo in packages) {
+            val appInfo = packageInfo.applicationInfo
+            if (appInfo != null && (appInfo.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM == 0)) {
+                val appName = packageManager.getApplicationLabel(appInfo).toString()
+                apps.add(AppInfo(packageInfo.packageName, appName))
+            }
+        }
+        apps.sortBy { it.name }
+        val tempSelected = selectedApps.toMutableSet()
+        val adapter = AppListAdapter(this, apps) { packageName, isChecked ->
+            if (isChecked) tempSelected.add(packageName) else tempSelected.remove(packageName)
+        }
+        dialogLvApps.adapter = adapter
+
         AlertDialog.Builder(this)
             .setTitle("Selecciona las aplicaciones a replicar")
-            .setView(lvApps)
-            .setPositiveButton("Aceptar") { dialog, _ -> dialog.dismiss() }
+            .setView(dialogView)
+            .setPositiveButton("Aceptar") { dialog, _ ->
+                selectedApps.clear()
+                selectedApps.addAll(tempSelected)
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancelar", null)
             .show()
     }
 
@@ -251,11 +277,37 @@ class ServerConfigActivity : AppCompatActivity() {
     }
 
     private fun showAppSelectionDialog() {
-        loadInstalledApps()
+        // Inflar el layout personalizado del diálogo
+        val dialogView = layoutInflater.inflate(R.layout.dialog_app_selection, null)
+        val dialogLvApps = dialogView.findViewById<ListView>(R.id.dialogLvApps)
+
+        // Cargar apps y configurar adaptador temporal para el diálogo
+        val packageManager = packageManager
+        val apps = mutableListOf<AppInfo>()
+        val packages = packageManager.getInstalledPackages(0)
+        for (packageInfo in packages) {
+            val appInfo = packageInfo.applicationInfo
+            if (appInfo != null && (appInfo.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM == 0)) {
+                val appName = packageManager.getApplicationLabel(appInfo).toString()
+                apps.add(AppInfo(packageInfo.packageName, appName))
+            }
+        }
+        apps.sortBy { it.name }
+        val tempSelected = selectedApps.toMutableSet()
+        val adapter = AppListAdapter(this, apps) { packageName, isChecked ->
+            if (isChecked) tempSelected.add(packageName) else tempSelected.remove(packageName)
+        }
+        dialogLvApps.adapter = adapter
+
         AlertDialog.Builder(this)
             .setTitle("Selecciona las aplicaciones a replicar")
-            .setView(lvApps)
-            .setPositiveButton("Aceptar") { dialog, _ -> dialog.dismiss() }
+            .setView(dialogView)
+            .setPositiveButton("Aceptar") { dialog, _ ->
+                selectedApps.clear()
+                selectedApps.addAll(tempSelected)
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancelar", null)
             .show()
     }
 
