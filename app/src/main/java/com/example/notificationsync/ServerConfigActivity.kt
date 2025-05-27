@@ -65,7 +65,7 @@ class ServerConfigActivity : AppCompatActivity() {
     }
 
     private fun showAppSelectionDialog() {
-        // Inflar el layout personalizado del diálogo
+        // Usar BottomSheetDialog para una experiencia más nativa y moderna
         val dialogView = layoutInflater.inflate(R.layout.dialog_app_selection, null)
         val dialogLvApps = dialogView.findViewById<ListView>(R.id.dialogLvApps)
 
@@ -76,7 +76,8 @@ class ServerConfigActivity : AppCompatActivity() {
         val resolveInfos = pm.queryIntentActivities(intent, 0)
         val apps = resolveInfos.map {
             val appName = it.loadLabel(pm).toString()
-            AppInfo(it.activityInfo.packageName, appName)
+            val appIcon = it.loadIcon(pm)
+            AppInfo(it.activityInfo.packageName, appName, appIcon)
         }.sortedBy { it.name }
 
         val tempSelected = selectedApps.toMutableSet()
@@ -85,16 +86,17 @@ class ServerConfigActivity : AppCompatActivity() {
         }
         dialogLvApps.adapter = adapter
 
-        AlertDialog.Builder(this)
-            .setTitle("Selecciona las aplicaciones a replicar")
-            .setView(dialogView)
-            .setPositiveButton("Aceptar") { dialog, _ ->
-                selectedApps.clear()
-                selectedApps.addAll(tempSelected)
-                dialog.dismiss()
-            }
-            .setNegativeButton("Cancelar", null)
-            .show()
+        val bottomSheetDialog = com.google.android.material.bottomsheet.BottomSheetDialog(this)
+        bottomSheetDialog.setContentView(dialogView)
+        bottomSheetDialog.setTitle("Selecciona las aplicaciones a replicar")
+        dialogView.findViewById<ListView>(R.id.dialogLvApps)
+        // Botón aceptar/cancelar personalizado
+        // Puedes agregar botones en el layout si lo deseas
+        bottomSheetDialog.setOnDismissListener {
+            selectedApps.clear()
+            selectedApps.addAll(tempSelected)
+        }
+        bottomSheetDialog.show()
     }
 
     */
@@ -227,6 +229,7 @@ data class AppInfo(val packageName: String, val name: String)
 package com.example.notificationsync
 
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.provider.Settings
 import android.text.TextUtils
@@ -275,7 +278,7 @@ class ServerConfigActivity : AppCompatActivity() {
     }
 
     private fun showAppSelectionDialog() {
-        // Inflar el layout personalizado del diálogo
+        // Usar BottomSheetDialog para una experiencia más nativa y moderna
         val dialogView = layoutInflater.inflate(R.layout.dialog_app_selection, null)
         val dialogLvApps = dialogView.findViewById<ListView>(R.id.dialogLvApps)
 
@@ -286,7 +289,8 @@ class ServerConfigActivity : AppCompatActivity() {
         val resolveInfos = pm.queryIntentActivities(intent, 0)
         val apps = resolveInfos.map {
             val appName = it.loadLabel(pm).toString()
-            AppInfo(it.activityInfo.packageName, appName)
+            val appIcon = it.loadIcon(pm)
+            AppInfo(it.activityInfo.packageName, appName, appIcon)
         }.sortedBy { it.name }
 
         val tempSelected = selectedApps.toMutableSet()
@@ -295,16 +299,17 @@ class ServerConfigActivity : AppCompatActivity() {
         }
         dialogLvApps.adapter = adapter
 
-        AlertDialog.Builder(this)
-            .setTitle("Selecciona las aplicaciones a replicar")
-            .setView(dialogView)
-            .setPositiveButton("Aceptar") { dialog, _ ->
-                selectedApps.clear()
-                selectedApps.addAll(tempSelected)
-                dialog.dismiss()
-            }
-            .setNegativeButton("Cancelar", null)
-            .show()
+        val bottomSheetDialog = com.google.android.material.bottomsheet.BottomSheetDialog(this)
+        bottomSheetDialog.setContentView(dialogView)
+        bottomSheetDialog.setTitle("Selecciona las aplicaciones a replicar")
+        dialogView.findViewById<ListView>(R.id.dialogLvApps)
+        // Botón aceptar/cancelar personalizado
+        // Puedes agregar botones en el layout si lo deseas
+        bottomSheetDialog.setOnDismissListener {
+            selectedApps.clear()
+            selectedApps.addAll(tempSelected)
+        }
+        bottomSheetDialog.show()
     }
 
     private fun checkNotificationPermission() {
@@ -385,4 +390,4 @@ class ServerConfigActivity : AppCompatActivity() {
     }
 }
 
-data class AppInfo(val packageName: String, val name: String)
+data class AppInfo(val packageName: String, val name: String, val icon: Drawable)

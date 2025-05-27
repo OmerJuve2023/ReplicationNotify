@@ -5,7 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.CheckBox
+import android.widget.ImageView
+import android.widget.Switch
 import android.widget.TextView
 
 /**
@@ -23,19 +24,18 @@ class AppListAdapter(
 
         val app = getItem(position)!!
 
-        val checkBox = view.findViewById<CheckBox>(R.id.cbApp)
+        val imageView = view.findViewById<ImageView>(R.id.ivAppIcon)
         val textView = view.findViewById<TextView>(R.id.tvAppName)
+        val switchEnable = view.findViewById<Switch>(R.id.switchEnableApp)
 
         textView.text = app.name
+        imageView.setImageDrawable(app.icon)
 
-        // Configurar checkbox
-        checkBox.setOnCheckedChangeListener(null) // Limpiar listener anterior
-        checkBox.isChecked = false // Reset estado
-
-        checkBox.setOnCheckedChangeListener { _, isChecked ->
+        switchEnable.setOnCheckedChangeListener(null)
+        switchEnable.isChecked = false
+        switchEnable.setOnCheckedChangeListener { _, isChecked ->
             onSelectionChanged(app.packageName, isChecked)
         }
-
         return view
     }
 }
