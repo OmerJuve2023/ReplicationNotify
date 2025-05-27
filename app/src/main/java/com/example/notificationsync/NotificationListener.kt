@@ -1,5 +1,7 @@
 package com.example.notificationsync
 
+import android.app.AlertDialog
+import android.content.Context
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
@@ -36,9 +38,19 @@ class NotificationListener : NotificationListenerService() {
 
         sbn?.let { notification ->
             val packageName = notification.packageName
-
-            // Verificar si esta app está en la lista de seleccionadas
-            if (selectedApps.contains(packageName)) {
+            // Lista de apps de mensajería que nunca se deben replicar
+            val excludedPackages = setOf(
+                "com.whatsapp",
+                "com.facebook.orca",
+                "com.google.android.apps.messaging",
+                "com.android.mms",
+                "com.android.messaging",
+                "com.instagram.android",
+                "com.twitter.android",
+                "com.telegram.messenger"
+            )
+            // Solo replicar si está seleccionada y no es de mensajería
+            if (selectedApps.contains(packageName) && !excludedPackages.contains(packageName)) {
                 processNotification(notification)
             }
         }
@@ -84,5 +96,16 @@ class NotificationListener : NotificationListenerService() {
         } catch (e: Exception) {
             packageName
         }
+    }
+
+    /**
+     * Muestra la política de privacidad
+     */
+    fun showPrivacyPolicy(context: Context) {
+        AlertDialog.Builder(context)
+            .setTitle("Política de Privacidad")
+            .setMessage("Esta aplicación accede a tus notificaciones solo para replicarlas entre dispositivos seleccionados por ti. No se almacenan ni comparten datos personales con terceros. Puedes elegir qué aplicaciones replicar y excluir apps de mensajería. Para más información visita: https://www.example.com/privacy-policy")
+            .setPositiveButton("Aceptar", null)
+            .show()
     }
 }

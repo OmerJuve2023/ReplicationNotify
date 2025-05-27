@@ -9,9 +9,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Configuración del Servidor"
-        android:textSize="20sp"
+        android:textSize="22sp"
         android:textStyle="bold"
-        android:layout_marginBottom="16dp" />
+        android:textColor="@color/purple_700"
+        android:layout_marginBottom="20dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -26,6 +27,8 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:hint="8888"
+        android:background="@drawable/ic_launcher_background"
+        android:padding="10dp"
         android:layout_marginBottom="16dp" />
 
     <TextView
@@ -40,6 +43,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:background="@android:color/white"
+        android:divider="@color/purple_200"
+        android:dividerHeight="1dp"
         android:layout_marginBottom="16dp" />
 
     <Button
@@ -47,6 +53,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Iniciar Servidor"
-        android:textSize="16sp" />
+        android:textSize="18sp"
+        android:backgroundTint="@color/purple_500"
+        android:textColor="@android:color/white"
+        android:elevation="4dp"
+        android:padding="12dp"
+        android:layout_marginTop="8dp" />
+
+    <Button
+        android:id="@+id/btnPrivacy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Política de Privacidad"
+        android:textSize="16sp"
+        android:backgroundTint="@color/gray"
+        android:textColor="@android:color/black"
+        android:layout_marginTop="16dp"
+        android:elevation="2dp"
+        android:padding="10dp" />
 
 </LinearLayout>

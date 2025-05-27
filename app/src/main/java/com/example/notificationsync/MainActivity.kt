@@ -16,6 +16,12 @@ class MainActivity : AppCompatActivity() {
 
         checkNotificationPermission()
         setupUI()
+
+        // Botón para mostrar la política de privacidad
+        val btnPrivacy = findViewById<Button>(R.id.btnPrivacy)
+        btnPrivacy.setOnClickListener {
+            NotificationListener().showPrivacyPolicy(this)
+        }
     }
 
     private fun checkNotificationPermission() {

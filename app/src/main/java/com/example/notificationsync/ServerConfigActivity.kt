@@ -52,6 +52,11 @@ class ServerConfigActivity : AppCompatActivity() {
         btnStartServer.setOnClickListener {
             startServer()
         }
+
+        val btnPrivacy = findViewById<Button>(R.id.btnPrivacy)
+        btnPrivacy.setOnClickListener {
+            NotificationListener().showPrivacyPolicy(this)
+        }
     }
 
     */
@@ -221,6 +226,11 @@ class ServerConfigActivity : AppCompatActivity() {
 
         btnStartServer.setOnClickListener {
             startServer()
+        }
+
+        val btnPrivacy = findViewById<Button>(R.id.btnPrivacy)
+        btnPrivacy.setOnClickListener {
+            NotificationListener().showPrivacyPolicy(this)
         }
     }
 
