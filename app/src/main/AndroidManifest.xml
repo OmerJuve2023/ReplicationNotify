@@ -55,6 +55,11 @@
             </intent-filter>
         </service>
 
+        <!-- Política de privacidad (enlace de ejemplo) -->
+        <meta-data
+            android:name="com.google.android.gms.privacy.policy"
+            android:value="https://www.example.com/privacy-policy" />
+
     </application>
 
 </manifest>
