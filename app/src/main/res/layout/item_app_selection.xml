@@ -13,7 +13,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:buttonTint="@color/purple_500"
-        android:layout_marginEnd="16dp" />
+        android:layout_marginEnd="16dp"
+        android:gravity="center_vertical" />
 
     <TextView
         android:id="@+id/tvAppName"
@@ -22,6 +23,7 @@
         android:layout_weight="1"
         android:textSize="17sp"
         android:textColor="@color/purple_700"
-        android:text="Nombre de la aplicación" />
+        android:text="Nombre de la aplicación"
+        android:gravity="center_vertical" />
 
 </LinearLayout>

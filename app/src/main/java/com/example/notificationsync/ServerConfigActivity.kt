@@ -33,7 +33,8 @@ class ServerConfigActivity : AppCompatActivity() {
 
         setupUI()
         checkNotificationPermission()
-        loadInstalledApps()
+        // Quitar carga automática de apps
+        // loadInstalledApps()
     }
 
     */
@@ -45,6 +46,8 @@ class ServerConfigActivity : AppCompatActivity() {
         etPort = findViewById(R.id.etPort)
         btnStartServer = findViewById(R.id.btnStartServer)
         lvApps = findViewById(R.id.lvApps)
+        val btnSelectApps = findViewById<Button>(R.id.btnSelectApps)
+        val btnPrivacy = findViewById<Button>(R.id.btnPrivacy)
 
         // Establecer puerto por defecto
         etPort.setText("8888")
@@ -52,11 +55,22 @@ class ServerConfigActivity : AppCompatActivity() {
         btnStartServer.setOnClickListener {
             startServer()
         }
-
-        val btnPrivacy = findViewById<Button>(R.id.btnPrivacy)
+        btnSelectApps.setOnClickListener {
+            // Abrir selector de apps del sistema
+            showAppSelectionDialog()
+        }
         btnPrivacy.setOnClickListener {
             NotificationListener().showPrivacyPolicy(this)
         }
+    }
+
+    private fun showAppSelectionDialog() {
+        loadInstalledApps()
+        AlertDialog.Builder(this)
+            .setTitle("Selecciona las aplicaciones a replicar")
+            .setView(lvApps)
+            .setPositiveButton("Aceptar") { dialog, _ -> dialog.dismiss() }
+            .show()
     }
 
     */
@@ -102,12 +116,9 @@ class ServerConfigActivity : AppCompatActivity() {
         val packages = packageManager.getInstalledPackages(0)
 
         for (packageInfo in packages) {
-            // Filtrar solo apps que no sean del sistema o que sean apps conocidas
+            // Filtrar solo apps que no sean del sistema
             val appInfo = packageInfo.applicationInfo
-            if (appInfo != null &&
-                (appInfo.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM == 0 ||
-                        isKnownApp(packageInfo.packageName))
-            ) {
+            if (appInfo != null && (appInfo.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM == 0)) {
                 val appName = packageManager.getApplicationLabel(appInfo).toString()
                 apps.add(AppInfo(packageInfo.packageName, appName))
             }
@@ -214,24 +225,38 @@ class ServerConfigActivity : AppCompatActivity() {
 
         setupUI()
         checkNotificationPermission()
-        loadInstalledApps()
+        // Quitar carga automática de apps
+        // loadInstalledApps()
     }
 
     private fun setupUI() {
         etPort = findViewById(R.id.etPort)
         btnStartServer = findViewById(R.id.btnStartServer)
         lvApps = findViewById(R.id.lvApps)
+        val btnSelectApps = findViewById<Button>(R.id.btnSelectApps)
+        val btnPrivacy = findViewById<Button>(R.id.btnPrivacy)
 
         etPort.setText("8888")
 
         btnStartServer.setOnClickListener {
             startServer()
         }
-
-        val btnPrivacy = findViewById<Button>(R.id.btnPrivacy)
+        btnSelectApps.setOnClickListener {
+            // Abrir selector de apps del sistema
+            showAppSelectionDialog()
+        }
         btnPrivacy.setOnClickListener {
             NotificationListener().showPrivacyPolicy(this)
         }
+    }
+
+    private fun showAppSelectionDialog() {
+        loadInstalledApps()
+        AlertDialog.Builder(this)
+            .setTitle("Selecciona las aplicaciones a replicar")
+            .setView(lvApps)
+            .setPositiveButton("Aceptar") { dialog, _ -> dialog.dismiss() }
+            .show()
     }
 
     private fun checkNotificationPermission() {
