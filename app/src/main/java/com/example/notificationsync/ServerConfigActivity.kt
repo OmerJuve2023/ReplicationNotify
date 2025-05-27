@@ -69,18 +69,16 @@ class ServerConfigActivity : AppCompatActivity() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_app_selection, null)
         val dialogLvApps = dialogView.findViewById<ListView>(R.id.dialogLvApps)
 
-        // Cargar apps y configurar adaptador temporal para el diálogo
-        val packageManager = packageManager
-        val apps = mutableListOf<AppInfo>()
-        val packages = packageManager.getInstalledPackages(0)
-        for (packageInfo in packages) {
-            val appInfo = packageInfo.applicationInfo
-            if (appInfo != null && (appInfo.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM == 0)) {
-                val appName = packageManager.getApplicationLabel(appInfo).toString()
-                apps.add(AppInfo(packageInfo.packageName, appName))
-            }
-        }
-        apps.sortBy { it.name }
+        // Mostrar solo apps visibles en el launcher
+        val pm = packageManager
+        val intent = Intent(Intent.ACTION_MAIN, null)
+        intent.addCategory(Intent.CATEGORY_LAUNCHER)
+        val resolveInfos = pm.queryIntentActivities(intent, 0)
+        val apps = resolveInfos.map {
+            val appName = it.loadLabel(pm).toString()
+            AppInfo(it.activityInfo.packageName, appName)
+        }.sortedBy { it.name }
+
         val tempSelected = selectedApps.toMutableSet()
         val adapter = AppListAdapter(this, apps) { packageName, isChecked ->
             if (isChecked) tempSelected.add(packageName) else tempSelected.remove(packageName)
@@ -281,18 +279,16 @@ class ServerConfigActivity : AppCompatActivity() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_app_selection, null)
         val dialogLvApps = dialogView.findViewById<ListView>(R.id.dialogLvApps)
 
-        // Cargar apps y configurar adaptador temporal para el diálogo
-        val packageManager = packageManager
-        val apps = mutableListOf<AppInfo>()
-        val packages = packageManager.getInstalledPackages(0)
-        for (packageInfo in packages) {
-            val appInfo = packageInfo.applicationInfo
-            if (appInfo != null && (appInfo.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM == 0)) {
-                val appName = packageManager.getApplicationLabel(appInfo).toString()
-                apps.add(AppInfo(packageInfo.packageName, appName))
-            }
-        }
-        apps.sortBy { it.name }
+        // Mostrar solo apps visibles en el launcher
+        val pm = packageManager
+        val intent = Intent(Intent.ACTION_MAIN, null)
+        intent.addCategory(Intent.CATEGORY_LAUNCHER)
+        val resolveInfos = pm.queryIntentActivities(intent, 0)
+        val apps = resolveInfos.map {
+            val appName = it.loadLabel(pm).toString()
+            AppInfo(it.activityInfo.packageName, appName)
+        }.sortedBy { it.name }
+
         val tempSelected = selectedApps.toMutableSet()
         val adapter = AppListAdapter(this, apps) { packageName, isChecked ->
             if (isChecked) tempSelected.add(packageName) else tempSelected.remove(packageName)
